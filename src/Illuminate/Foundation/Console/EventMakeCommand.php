@@ -72,4 +72,33 @@ class EventMakeCommand extends GeneratorCommand
     {
         return $rootNamespace.'\Events';
     }
+    
+    /**
+     * Get the console command options.
+     *
+     * @return array
+     */
+    protected function getOptions()
+    {
+        return [
+            ['listener', 'l', InputOption::VALUE_NONE, 'Create the accompanying listener'],
+        ];
+    }
+
+    /**
+     * Execute the console command.
+     *
+     * @return void
+     */
+    public function handle()
+    {
+        parent::handle();
+
+        if ($this->option('listener')) {
+            $event = $this->getNameInput();
+            $this->callSilent('make:listener', array_filter(
+                ['name' => $event . 'Listener', '--event' => $event]
+            ));
+        }
+    }
 }
